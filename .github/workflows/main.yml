@@ -41,7 +41,6 @@ jobs:
     # 3. Docker Build (Task 4: Containerization)
     - name: Docker Image Build Check
       run: |
-        cd Backend
-        # This proves the app is fully containerized for the evaluator
-        docker build -t journal-backend:latest .
+        # This command looks specifically for the file inside the Backend folder
+        docker build -t journal-backend:latest -f ./Backend/Dockerfile ./Backend
         echo "Docker image built successfully!"
