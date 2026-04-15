@@ -1,0 +1,47 @@
+.journal-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+}
+
+textarea {
+  resize: vertical;
+}
+
+.entry {
+  background: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  margin: 15px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.1s ease-in-out;
+}
+
+.entry:hover {
+  transform: translateY(-2px);
+}
+
+.entry p {
+  margin: 0 0 8px 0;
+}
+
+.entry button {
+  background-color: #f44336;
+}
+
+.entry button:hover {
+  background-color: #e53935;
+}
+
+.logout-btn {
+  float: right;
+  background-color: #ff9800;
+  margin-bottom: 15px;
+}
+
+.logout-btn:hover {
+  background-color: #fb8c00;
+}
