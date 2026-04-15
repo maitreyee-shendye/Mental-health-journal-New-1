@@ -1,0 +1,1 @@
+In today’s fast-paced digital environment, mental health awareness is increasing, but individuals often lack a private, structured, and secure platform to consistently express their thoughts and track emotional well-being. Traditional journaling methods are either not easily accessible, lack data security, or do not provide organized tracking of entries over time.
