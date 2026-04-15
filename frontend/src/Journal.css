@@ -1,47 +1,171 @@
 .journal-container {
   max-width: 700px;
   margin: 40px auto;
-  padding: 20px;
+  padding: 28px;
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
-textarea {
+/* Header with title and logout */
+.journal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.journal-title {
+  margin: 0;
+  font-size: 24px;
+  color: #1e293b;
+  letter-spacing: -0.3px;
+}
+
+.logout-btn {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  border: none;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+/* Input section */
+.journal-input-section {
+  margin-bottom: 28px;
+}
+
+.journal-input-section textarea {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 15px;
+  line-height: 1.6;
   resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+  color: #334155;
+}
+
+.journal-input-section textarea:focus {
+  outline: none;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.journal-input-section textarea::placeholder {
+  color: #94a3b8;
+}
+
+.save-btn {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px;
+  background: linear-gradient(135deg, #7c3aed, #2563eb);
+  border: none;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.3px;
+}
+
+.save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
+}
+
+.save-btn:active {
+  transform: translateY(0);
+}
+
+/* Entries */
+.entries-title {
+  font-size: 16px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.no-entries {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+  padding: 32px 0;
 }
 
 .entry {
-  background: #fff;
-  border-radius: 10px;
-  padding: 15px;
-  margin: 15px 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  transition: transform 0.1s ease-in-out;
+  background: #fafbfc;
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin: 12px 0;
+  border: 1px solid #f1f5f9;
+  transition: all 0.2s ease;
 }
 
 .entry:hover {
   transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  border-color: #e2e8f0;
 }
 
-.entry p {
-  margin: 0 0 8px 0;
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-.entry button {
-  background-color: #f44336;
+.entry-date {
+  font-size: 13px;
+  color: #94a3b8;
+  font-weight: 500;
 }
 
-.entry button:hover {
-  background-color: #e53935;
+.entry-text {
+  margin: 0 0 6px 0;
+  color: #374151;
+  font-size: 14px;
+  line-height: 1.6;
 }
 
-.logout-btn {
-  float: right;
-  background-color: #ff9800;
-  margin-bottom: 15px;
+.delete-btn {
+  background: none;
+  border: 1px solid #fecaca;
+  color: #ef4444;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  transition: all 0.2s ease;
 }
 
-.logout-btn:hover {
-  background-color: #fb8c00;
+.delete-btn:hover {
+  background: #fef2f2;
+  border-color: #ef4444;
 }

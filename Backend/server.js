@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const { analyzeMood } = require("./moodAnalyzer");
 
 const app = express();
 app.use(express.json());
@@ -28,7 +29,7 @@ const UserSchema = new mongoose.Schema({
 const User = mongoose.model("User", UserSchema);
 
 // --- Memory store for journals ---
-let journals = {}; // { userId: [ {id, text, createdAt} ] }
+let journals = {}; // { userId: [ {id, text, createdAt, mood} ] }
 
 // --- Middleware auth ---
 const auth = (req, res, next) => {
@@ -70,12 +71,36 @@ app.get("/journals", auth, (req, res) => {
   res.json(journals[req.userId] || []);
 });
 
-// --- Add journal ---
+// --- Add journal (now with mood analysis) ---
 app.post("/journals", auth, (req, res) => {
-  const entry = { id: Date.now(), text: req.body.text, createdAt: new Date() };
+  const mood = analyzeMood(req.body.text);
+  const entry = {
+    id: Date.now(),
+    text: req.body.text,
+    createdAt: new Date(),
+    mood: {
+      level: mood.level,
+      label: mood.label,
+      emoji: mood.emoji,
+      confidence: mood.confidence,
+      message: mood.message,
+      tips: mood.tips,
+      color: mood.color,
+      gradient: mood.gradient,
+      bgColor: mood.bgColor
+    }
+  };
   if (!journals[req.userId]) journals[req.userId] = [];
   journals[req.userId].unshift(entry); // newest first
   res.json(entry);
+});
+
+// --- Analyze mood (standalone endpoint) ---
+app.post("/analyze-mood", auth, (req, res) => {
+  const { text } = req.body;
+  if (!text) return res.status(400).json({ msg: "No text provided" });
+  const mood = analyzeMood(text);
+  res.json(mood);
 });
 
 // --- Delete journal ---
