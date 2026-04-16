@@ -10,7 +10,7 @@ const { analyzeMood } = require("./moodAnalyzer");
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cors({ origin: "https://mental-health-journal-azvtxa9v1-maitreyee-shendyes-projects.vercel.app", credentials: true }));
 
 require("dotenv").config();
 
@@ -58,12 +58,20 @@ app.post("/login", async (req, res) => {
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) return res.status(400).json({ msg: "Wrong password" });
   const token = jwt.sign({ id: user._id }, "secret123");
-  res.cookie("token", token, { httpOnly: true }).json({ msg: "Logged in" });
+  res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "None"
+}).json({ msg: "Logged in" });
 });
 
 // --- Logout ---
 app.post("/logout", (req, res) => {
-  res.clearCookie("token").json({ msg: "Logged out" });
+ res.clearCookie("token", {
+  httpOnly: true,
+  secure: true,
+  sameSite: "None"
+}).json({ msg: "Logged out" });
 });
 
 // --- Get journals ---
