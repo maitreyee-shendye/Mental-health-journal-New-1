@@ -29,13 +29,28 @@ const UserSchema = new mongoose.Schema({
 const User = mongoose.model("User", UserSchema);
 
 // --- Memory store for journals ---
-let journals = {}; // { userId: [ {id, text, createdAt, mood} ] }
+const JournalSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
+  text: String,
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  mood: Object
+});
+
+const Journal = mongoose.model("Journal", JournalSchema);
+
+
 
 // --- Middleware auth ---
 const auth = (req, res, next) => {
   const token = req.cookies.token;
   if (!token) return res.status(401).json({ msg: "No token" });
-  jwt.verify(token, "secret123", (err, decoded) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) return res.status(401).json({ msg: "Invalid token" });
     req.userId = decoded.id;
     next();
@@ -57,7 +72,7 @@ app.post("/login", async (req, res) => {
   if (!user) return res.status(400).json({ msg: "No user" });
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) return res.status(400).json({ msg: "Wrong password" });
-  const token = jwt.sign({ id: user._id }, "secret123");
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
   res.cookie("token", token, {
   httpOnly: true,
   secure: true,
@@ -75,12 +90,13 @@ app.post("/logout", (req, res) => {
 });
 
 // --- Get journals ---
-app.get("/journals", auth, (req, res) => {
-  res.json(journals[req.userId] || []);
+app.get("/journals", auth, async (req, res) => {
+  const userJournals = await Journal.find({ userId: req.userId }).sort({ createdAt: -1 });
+  res.json(userJournals);
 });
 
 // --- Add journal (now with mood analysis) ---
-app.post("/journals", auth, (req, res) => {
+app.post("/journals", auth, async (req, res) => {
   const mood = analyzeMood(req.body.text);
   const entry = {
     id: Date.now(),
@@ -98,10 +114,18 @@ app.post("/journals", auth, (req, res) => {
       bgColor: mood.bgColor
     }
   };
-  if (!journals[req.userId]) journals[req.userId] = [];
-  journals[req.userId].unshift(entry); // newest first
-  res.json(entry);
+
+  const newEntry = await Journal.create({
+  userId: req.userId,
+  text: req.body.text,
+  mood: entry.mood
 });
+
+
+
+res.json(newEntry);
+});
+
 
 // --- Analyze mood (standalone endpoint) ---
 app.post("/analyze-mood", auth, (req, res) => {
@@ -111,12 +135,13 @@ app.post("/analyze-mood", auth, (req, res) => {
   res.json(mood);
 });
 
+
 // --- Delete journal ---
-app.delete("/journals/:id", auth, (req, res) => {
-  if (journals[req.userId]) {
-    journals[req.userId] = journals[req.userId].filter(e => e.id != req.params.id);
-  }
+app.delete("/journals/:id", auth, async (req, res) => {
+  await Journal.findByIdAndDelete(req.params.id);
   res.json({ msg: "Deleted" });
 });
+
+
 
 app.listen(5000, () => console.log("Server running on http://localhost:5000"));

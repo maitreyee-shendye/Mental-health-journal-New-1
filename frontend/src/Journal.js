@@ -26,7 +26,7 @@ export default function Journal() {
   const addEntry = async () => {
     if (!text) return;
     const res = await axios.post(`${API}/journals`, { text }, { withCredentials: true });
-    setEntries([res.data, ...entries]);
+    setEntries([res.data, ...prev]);
     setText("");
 
     // Show mood feedback
@@ -38,7 +38,7 @@ export default function Journal() {
 
   const deleteEntry = async (id) => {
     await axios.delete(`${API}/journals/${id}`, { withCredentials: true });
-    setEntries(entries.filter(e => e.id !== id));
+    setEntries(entries.filter(e => e._id !== id));
   };
 
   const logout = async () => {
@@ -75,12 +75,12 @@ export default function Journal() {
         <p className="no-entries">No entries yet. Start writing to see your mood analysis! 🧠</p>
       )}
       {entries.map(e => (
-        <div className="entry" key={e.id}>
+        <div className="entry" key={e._id}>
           <div className="entry-header">
             <span className="entry-date">
               📅 {new Date(e.createdAt).toLocaleString()}
             </span>
-            <button className="delete-btn" onClick={() => deleteEntry(e.id)}>✕</button>
+            <button className="delete-btn" onClick={() => deleteEntry(e._id)}>✕</button>
           </div>
           <p className="entry-text">{e.text}</p>
           {e.mood && (
