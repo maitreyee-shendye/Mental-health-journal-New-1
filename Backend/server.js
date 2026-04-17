@@ -10,8 +10,14 @@ const { analyzeMood } = require("./moodAnalyzer");
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: "https://mental-health-journal-azvtxa9v1-maitreyee-shendyes-projects.vercel.app", credentials: true }));
-
+app.use(cors({
+  origin: [
+    "https://mental-health-journal-new.vercel.app",
+    "https://mental-health-journal-new-git-main-maitreyee-shendyes-projects.vercel.app",
+    "https://mental-health-journal-azvtxa9v1-maitreyee-shendyes-projects.vercel.app"
+  ],
+  credentials: true
+}));
 require("dotenv").config();
 
 mongoose.connect(process.env.MONGO_URI, {
